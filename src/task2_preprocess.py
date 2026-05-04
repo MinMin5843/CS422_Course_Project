@@ -59,7 +59,8 @@ def build_task2_dataset(df: pd.DataFrame):
         q=3,
         labels=["Low", "Medium", "High"]
     )
-
+    df = df.dropna(subset=["difficulty_cat"])
+    
     # Selecting the features
 
     feature_cols = [

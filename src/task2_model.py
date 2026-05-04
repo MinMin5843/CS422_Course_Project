@@ -15,8 +15,7 @@ def _build_models() -> Dict[str, object]:
     """
     models = {
         "Logistic Regression": LogisticRegression(
-            max_iter=500,
-            multi_class="auto"
+            max_iter=500
         ),
         "Random Forest": RandomForestClassifier(
             n_estimators=250,
