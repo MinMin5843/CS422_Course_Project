@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
 
 
 def build_task1_dataset(df: pd.DataFrame):
@@ -11,6 +12,11 @@ def build_task1_dataset(df: pd.DataFrame):
 
     df = df.copy()
     df = df.dropna(subset=["Future Career"])
+
+    # Remove classes with fewer than 2 samples
+    value_counts = df["Future Career"].value_counts()
+    valid_classes = value_counts[value_counts >= 2].index
+    df = df[df["Future Career"].isin(valid_classes)]
 
     skill_map = {"Weak": 1, "Moderate": 2, "Strong": 3}
     df["Python"] = df["Python"].map(skill_map)
@@ -41,8 +47,8 @@ def build_task1_dataset(df: pd.DataFrame):
     preprocessor = ColumnTransformer(
         transformers=[
             ("cat", OneHotEncoder(handle_unknown="ignore"), categorical_cols),
-        ],
-        remainder="passthrough",
+            ("num", SimpleImputer(strategy="median"), numeric_cols),
+        ]
     )
 
     # Train-test split
